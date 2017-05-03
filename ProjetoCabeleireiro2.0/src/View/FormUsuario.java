@@ -348,6 +348,7 @@ public class FormUsuario extends javax.swing.JFrame {
             preencherTabela("SELECT * FROM usuarios ORDER BY nome_usuario");
             
         } else {
+            mod.setCodigo(Integer.parseInt(jTextFieldCodigo.getText()));
             mod.setNome(jTextFieldNome.getText());
             mod.setUsuario(jTextFieldUsuário.getText());
             mod.setSenha(jPasswordFieldSenha.getText());
@@ -511,7 +512,7 @@ public class FormUsuario extends javax.swing.JFrame {
                 
             } while (conex.rs.next());
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "nao foi possivel baixar a tabela de preencimento\n" + ex);
+            JOptionPane.showMessageDialog(null, "nao foi possivel baixar a tabela de preencimento (formUsuario)\n" + ex);
         }
         ModelTabela modelo = new ModelTabela(dados, colunas);
         

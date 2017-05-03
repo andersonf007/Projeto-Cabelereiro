@@ -21,7 +21,7 @@ public class ConexaoBD {
     public ResultSet rs;//responsavel por guardar as pesquisas
     private String driver = "org.postgresql.Driver";
     private String caminho = "jdbc:postgresql://localhost:5432/ProjetoCabeleireiro";
-    private String usuario = "anderson";
+    private String usuario = "postgres";
     private String senha = "1996";
     public Connection con;//resonsavel pela conexao
     
@@ -30,7 +30,7 @@ public class ConexaoBD {
         try {
             System.setProperty("jdbc.Drivers", driver);
             con = DriverManager.getConnection(caminho,usuario,senha);
-         // JOptionPane.showMessageDialog(null, "conectado ao banco com sucesso!");
+        //  JOptionPane.showMessageDialog(null, "conectado ao banco com sucesso!");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "erro ao se conectar com o banco\n" + ex.getMessage());
         }
@@ -41,14 +41,14 @@ public class ConexaoBD {
             stm = con.createStatement(rs.TYPE_SCROLL_INSENSITIVE,rs.CONCUR_READ_ONLY);
             rs = stm.executeQuery(sql);
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "erro ao executar sql ( executaSql )\n" + ex.getMessage());           
+            JOptionPane.showMessageDialog(null, "erro ao executar sql ( conexaoBD )\n" + ex.getMessage());           
         }
     }
     
     public void desconecta(){//metodo responsavel por desconectar a conexao com a base de dados
         try {
             con.close();
-        //    JOptionPane.showMessageDialog(null, "banco de dados desconectado com sucesso!");
+       //     JOptionPane.showMessageDialog(null, "banco de dados desconectado com sucesso!");
         } catch (SQLException ex) {
               JOptionPane.showMessageDialog(null, "erro ao desconectar com o banco\n" + ex.getMessage());
         }

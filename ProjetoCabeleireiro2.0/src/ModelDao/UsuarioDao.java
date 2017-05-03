@@ -69,7 +69,7 @@ public class UsuarioDao {
             pst.execute();
             JOptionPane.showMessageDialog(null, "Dados alterados com sucesso!!!");
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "nao foi possivel alterar os dados \n" + ex);
+            JOptionPane.showMessageDialog(null, "nao foi possivel alterar os dados  (UsuarioDao)\n" + ex);
         }
 
         conex.desconecta();

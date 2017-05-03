@@ -79,7 +79,7 @@ public class ClienteDao {
         conex.conexao();
         
         try {
-            PreparedStatement pst2 = conex.con.prepareCall("DELETE FROM agenda WHERE codcliente_agenda=?");
+            PreparedStatement pst2 = conex.con.prepareCall("DELETE FROM agenda WHERE codcliente_agendas=?");
             pst2.setInt(1, mod2.getCodigo());
             pst2.execute();
             JOptionPane.showMessageDialog(null, "Dados a agenda deletados com sucesso!!!");
@@ -89,7 +89,7 @@ public class ClienteDao {
             pst.execute();
             JOptionPane.showMessageDialog(null, "Dados deletados com sucesso!!!");
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "nao foi possivel excluir os dados \n" + ex);
+            JOptionPane.showMessageDialog(null, "nao foi possivel excluir os dados (clienteDao) \n" + ex);
         }
         
         conex.desconecta();

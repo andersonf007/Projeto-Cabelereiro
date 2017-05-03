@@ -441,7 +441,7 @@ public class FormCliente extends javax.swing.JFrame {
 
             } while (conex.rs.next());
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "nao foi possivel baixar a tabela de preencimento\n" + ex);
+            JOptionPane.showMessageDialog(null, "nao foi possivel baixar a tabela de preencimento (formCliente)\n" + ex);
         }
         ModelTabela modelo = new ModelTabela(dados, colunas);
 

@@ -32,7 +32,7 @@ public class AgendaDao {
         conex.conexao();
         
         try {
-            PreparedStatement pst = conex.con.prepareStatement("INSERT INTO agendas (codCliente_agendas,horario_agendas,data_agendas,servico_agendas,status_agendas) VALUES(?,?,?,?,?)");
+            PreparedStatement pst = conex.con.prepareStatement("INSERT INTO agenda(codCliente_agendas,horario_agendas,data_agendas,servico_agendas,status_agendas) VALUES(?,?,?,?,?)");
        pst.setInt(1, codCli);
        pst.setString(2, agenda.getHorario());
        //pst.setInt(3, codFun);
@@ -42,7 +42,7 @@ public class AgendaDao {
        pst.execute();
             JOptionPane.showMessageDialog(null, "agendamento marcado com sucesso!");
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "erro ao salvar agendamento" + ex);
+            JOptionPane.showMessageDialog(null, "erro ao salvar agendamento (agendaDao)" + ex);
         }
         
         conex.desconecta();
@@ -55,7 +55,7 @@ public class AgendaDao {
             conexCliente.rs.first();
             codCli = conexCliente.rs.getInt("cod_cliente");
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "nao foi possivel buscar o cliente " + ex);
+            JOptionPane.showMessageDialog(null, "nao foi possivel buscar o cliente (agendaDao) " + ex);
         }
     }
     
@@ -66,7 +66,7 @@ public class AgendaDao {
             conexCliente.rs.first();
             codCli = conexCliente.rs.getInt("cod_cliente");
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "nao foi possivel buscar o cliente " + ex);
+            JOptionPane.showMessageDialog(null, "nao foi possivel buscar o cliente (agendaDao)" + ex);
         }
         return codCli;
     }
@@ -89,7 +89,7 @@ public class AgendaDao {
             conexFuncionario.rs.first();
             codFun = conexFuncionario.rs.getInt("cod_funcionario");
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "nao foi possivel buscar o funcionario " + ex);
+            JOptionPane.showMessageDialog(null, "nao foi possivel buscar o funcionario (agendaDao)" + ex);
         }
         return codFun;
     }
@@ -97,7 +97,7 @@ public class AgendaDao {
     public void editar(BeansAgenda mod, int codCliente) {
         conex.conexao();
         
-        String sql = "UPDATE agendas SET horario_agendas=?, data_agendas=?, servico_agendas=?"
+        String sql = "UPDATE agenda SET horario_agendas=?, data_agendas=?, servico_agendas=?"
                     + "WHERE cod_agendas=? ";
       /*  "UPDATE agenda A set C.nome_cliente=?, F.nome_funcionario=?, A.horario_agenda=?, "
                    + "A.data_agenda=?, A.servico_agenda=? JOIN clientes C ON C.cod_cliente = A.codcliente_agenda"
@@ -114,7 +114,7 @@ public class AgendaDao {
             JOptionPane.showMessageDialog(null, "Dados alterados com sucesso!!!");
         } catch (SQLException ex) {
             System.out.println("ModelDao.AgendaDao.editar()\n" + ex);
-//JOptionPane.showMessageDialog(null, "nao foi possivel alterar os dados  agendaDao \n" + ex);
+            JOptionPane.showMessageDialog(null, "nao foi possivel alterar os dados  agendaDao \n" + ex);
         }
         conex.desconecta();
      }
@@ -123,7 +123,7 @@ public class AgendaDao {
         conex.conexao();
        //  System.out.println(mod.getCodigo());
         try {
-            PreparedStatement pst = conex.con.prepareCall("DELETE FROM agendas WHERE cod_agendas=?");
+            PreparedStatement pst = conex.con.prepareCall("DELETE FROM agenda WHERE cod_agendas=?");
             pst.setInt(1, mod.getCodigo());
             pst.execute();
             JOptionPane.showMessageDialog(null, "Dados deletados com sucesso!!!");

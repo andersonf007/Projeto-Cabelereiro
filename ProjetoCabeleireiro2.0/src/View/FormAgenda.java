@@ -40,7 +40,7 @@ public class FormAgenda extends javax.swing.JFrame {
        status = "Aberto";
        status2 = "Fechado";
        sql_preencher_tabela_do_dia ="SELECT cod_agendas,nome_cliente,telefone_cliente,"
-               + "data_agendas,horario_agendas,servico_agendas,presenca_agendas FROM agendas"
+               + "data_agendas,horario_agendas,servico_agendas,presenca_agendas FROM agenda"
                + " JOIN clientes ON cod_cliente = codcliente_agendas"
                + " WHERE data_agendas ='"+datahoje+"' AND status_agendas ='"+status+"' ORDER BY horario_agendas";
 
@@ -336,6 +336,7 @@ public class FormAgenda extends javax.swing.JFrame {
     private void jButtonFinalizarAgendamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFinalizarAgendamentoActionPerformed
 
         if (flag == 1) {
+            if(!jTextFieldCliente.getText().isEmpty()){
             agenda.setNomeCliente(jTextFieldCliente.getText());
         //    agenda.setNomeFuncionario((String) jComboBoxFuncionario.getSelectedItem());
             agenda.setData(jDateChooserdata.getDate());
@@ -343,7 +344,7 @@ public class FormAgenda extends javax.swing.JFrame {
             agenda.setServico(jtextFieldServico.getText());
             agenda.setStatus("Aberto");       
             dao.salvar(agenda);
-
+            
             jTextFieldCliente.setText("");
             jtextFieldServico.setText("");
 
@@ -360,7 +361,10 @@ public class FormAgenda extends javax.swing.JFrame {
             jTableCliente.setEnabled(false);
             jDateChooserDataDesejada.setEnabled(true);
             jButtonPesquisaDiaDesejado.setEnabled(true);
-
+            }else{
+                JOptionPane.showMessageDialog(null, "voce deve selecionar um cliente");
+                jTextFieldCliente.requestFocus();
+            }
             preencherTabelaAgendaDoDia(sql_preencher_tabela_do_dia);
         } else {
             agenda.setCodigo(Integer.parseInt(jTextFieldCodigo.getText()));
@@ -424,7 +428,7 @@ public class FormAgenda extends javax.swing.JFrame {
     private void jTableAgendamentoDoDiaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableAgendamentoDoDiaMouseClicked
         String cod_agenda = "" + jTableAgendamentoDoDia.getValueAt(jTableAgendamentoDoDia.getSelectedRow(), 0);
         conex.conexao();
-        conex.executaSql("SELECT * FROM agendas A JOIN clientes C ON A.codcliente_agendas = C.cod_cliente "
+        conex.executaSql("SELECT * FROM agenda A JOIN clientes C ON A.codcliente_agendas = C.cod_cliente "
                 + "WHERE A.cod_agendas = '"+cod_agenda+"'");
          try {
             conex.rs.first();
@@ -498,9 +502,9 @@ public class FormAgenda extends javax.swing.JFrame {
         String sql = null;
        
         if(jRadioButtonPresente.isSelected()){
-            sql = "UPDATE agendas SET presenca_agendas ='P' WHERE cod_agendas = '"+jTextFieldCodigo.getText()+"'";
+            sql = "UPDATE agenda SET presenca_agendas ='P' WHERE cod_agendas = '"+jTextFieldCodigo.getText()+"'";
         }else if(jRadioButtonAusente.isSelected()){ 
-            sql = "UPDATE agendas SET presenca_agendas ='F' WHERE cod_agendas = '"+jTextFieldCodigo.getText()+"'";
+            sql = "UPDATE agenda SET presenca_agendas ='F' WHERE cod_agendas = '"+jTextFieldCodigo.getText()+"'";
         }
         if (resposta == JOptionPane.YES_OPTION) {
             try {
@@ -535,7 +539,7 @@ public class FormAgenda extends javax.swing.JFrame {
 
     private void jButtonPesquisaDiaDesejadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPesquisaDiaDesejadoActionPerformed
          preencherTabelaAgendaDoDiaDesejado("SELECT cod_agendas,nome_cliente,telefone_cliente,"
-               + "data_agendas,horario_agendas,servico_agendas,presenca_agendas FROM agendas"
+               + "data_agendas,horario_agendas,servico_agendas,presenca_agendas FROM agenda"
                + " JOIN clientes ON cod_cliente = codcliente_agendas"
                + " WHERE data_agendas ='"+jDateChooserDataDesejada.getDate()+"' AND status_agendas ='"+status2+"' ORDER BY horario_agendas");
     }//GEN-LAST:event_jButtonPesquisaDiaDesejadoActionPerformed
@@ -573,22 +577,7 @@ public class FormAgenda extends javax.swing.JFrame {
             preencherTabelaAgendaDoDia(sql_preencher_tabela_do_dia);
         }
     }//GEN-LAST:event_jButtonExcluirAgendamentoActionPerformed
-    /*
-    public void preencherFuncionarios(){
-        conex.conexao();
-        conex.executaSql("SELECT * FROM funcionarios ORDER BY nome_funcionario");
-        try{
-            conex.rs.first();
-            jComboBoxFuncionario.removeAllItems();
-            do{
-                jComboBoxFuncionario.addItem(conex.rs.getString("nome_funcionario"));
-            }while(conex.rs.next());
-        }catch(SQLException ex){
-            JOptionPane.showMessageDialog(null, "erro ao preencher funcionarios" + ex);
-        }
-        conex.desconecta();
-    }*/
-    
+
     public void preencherTabelaCliente(String sql) {
         ArrayList dados = new ArrayList();
         String[] colunas = new String[]{"ID", "Nome", "Telefone"};
@@ -604,7 +593,7 @@ public class FormAgenda extends javax.swing.JFrame {
 
             } while (conex.rs.next());
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "nao foi possivel baixar a tabela de preencimento\n" + ex);
+            JOptionPane.showMessageDialog(null, "nao foi possivel baixar a tabela de preencimento do cliente (formAgenda)\n" + ex);
         }
         ModelTabela modelo = new ModelTabela(dados, colunas);
 
@@ -637,7 +626,7 @@ public class FormAgenda extends javax.swing.JFrame {
                           conex.rs.getString("servico_agendas"), conex.rs.getString("presenca_agendas")});
             } while (conex.rs.next());
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "não tem agendamento para hoje\n" + ex);
+            JOptionPane.showMessageDialog(null, "não tem agendamento para hoje (formAgenda)(dia)\n" + ex);
         }
         ModelTabela modelo = new ModelTabela(dados, colunas);
 

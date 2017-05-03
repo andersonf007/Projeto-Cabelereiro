@@ -23,7 +23,7 @@ public class FormFuncionario extends javax.swing.JFrame {
 
     public FormFuncionario() {
         initComponents();
-        preencherTabela("SELECT * FROM Funcionarios ORDER BY nome_funcionario");
+        preencherTabela("SELECT * FROM funcionarios ORDER BY nome_funcionario");
     }
 
     
@@ -284,7 +284,7 @@ public class FormFuncionario extends javax.swing.JFrame {
             jButtonEditar.setEnabled(true);
             jButtonExcluir.setEnabled(true);
 
-            preencherTabela("SELECT * FROM Funcionarios ORDER BY nome_funcionario");
+            preencherTabela("SELECT * FROM funcionarios ORDER BY nome_funcionario");
         }
 
     }//GEN-LAST:event_jButtonSalvarActionPerformed
@@ -313,7 +313,7 @@ public class FormFuncionario extends javax.swing.JFrame {
     //    jDateChooserDataNascimento.setEnabled(!true);
         jTextFieldPesquisa.setEnabled(!false);
 
-        preencherTabela("SELECT * FROM Funcionarios ORDER BY cod_funcionario");
+        preencherTabela("SELECT * FROM funcionarios ORDER BY cod_funcionario");
 
 
     }//GEN-LAST:event_jButtonCancelarActionPerformed
@@ -336,7 +336,7 @@ public class FormFuncionario extends javax.swing.JFrame {
     //    jDateChooserDataNascimento.setEnabled(true);
         jTextFieldPesquisa.setEnabled(false);
 
-        preencherTabela("SELECT * FROM Funcionarios ORDER BY nome_funcionario");
+        preencherTabela("SELECT * FROM funcionarios ORDER BY nome_funcionario");
 
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
@@ -370,7 +370,7 @@ public class FormFuncionario extends javax.swing.JFrame {
             jButtonEditar.setEnabled(false);
             jButtonExcluir.setEnabled(false);
 
-            preencherTabela("SELECT * FROM Funcionarios ORDER BY nome_funcionario");
+            preencherTabela("SELECT * FROM funcionarios ORDER BY nome_funcionario");
         }
 
     }//GEN-LAST:event_jButtonExcluirActionPerformed
@@ -437,7 +437,7 @@ public class FormFuncionario extends javax.swing.JFrame {
 
             } while (conex.rs.next());
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "nao foi possivel baixar a tabela de preencimento\n" + ex);
+            JOptionPane.showMessageDialog(null, "nao foi possivel baixar a tabela de preencimento (formFuncionario)\n" + ex);
         }
         ModelTabela modelo = new ModelTabela(dados, colunas);
 

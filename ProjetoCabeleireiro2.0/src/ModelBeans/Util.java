@@ -35,14 +35,14 @@ public class Util {
         
         try{
             conex.conexao();
-            String sql = "UPDATE agenda SET status_agenda=? WHERE data_agenda < ?";
+            String sql = "UPDATE agenda SET status_agendas=? WHERE data_agendas < ?";
             PreparedStatement pst = conex.con.prepareStatement(sql);
             pst.setString(1, "Fechado");
             pst.setDate(2, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));            
             pst.executeUpdate(); 
             pst.close();      
         }catch(Exception e){
-            JOptionPane.showMessageDialog(null, "nao foi possivel alterar o status no banco de dados \n" + e);
+            JOptionPane.showMessageDialog(null, "nao foi possivel alterar o status no banco de dados (Util)\n" + e);
         }       
     conex.desconecta();
     }   

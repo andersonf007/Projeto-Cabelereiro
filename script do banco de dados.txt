@@ -1,0 +1,40 @@
+create table clientes (
+	cod_cliente serial not null,
+	nome_cliente varchar(40),
+	email_cliente varchar(50),
+	sexo_cliente varchar(15),
+	telefone_cliente integer,
+CONSTRAINT "cliente_pk" PRIMARY KEY("cod_cliente")
+);
+
+create table usuarios (
+	cod_usuario serial not null,
+	nome_usuario varchar(30),
+	usuario_usuario varchar(30),
+	senha_usuario varchar(40),
+	senhaconfirmacao_usuario varchar(40),
+	tipo_usuario varchar(30),
+CONSTRAINT "usuario_pk" PRIMARY KEY("cod_usuario")
+);
+
+create table funcionarios (
+	cod_funcionario serial not null,
+	nome_funcionario varchar(40), 
+	sexo_funcionario varchar(20),
+	telefone_funcionario integer,
+CONSTRAINT "funcionario_pk" PRIMARY KEY("cod_funcionario")
+);
+
+create table agenda (
+	cod_agendas serial not null,
+	horario_agendas varchar(10),
+	data_agendas date,
+	servico_agendas varchar(50),
+	presenca_agendas varchar(1),
+	codCliente_agendas integer,
+	CONSTRAINT agendas_fk FOREIGN KEY (codCliente_agendas) REFERENCES clientes (cod_cliente)
+);
+
+ALTER TABLE agendas ADD COLUMN status_agendas varchar(15);
+ALTER TABLE clientes ALTER COLUMN telefone_cliente TYPE varchar(20);
+ALTER TABLE funcionarios ALTER COLUMN telefone_funcionario TYPE varchar(20);
