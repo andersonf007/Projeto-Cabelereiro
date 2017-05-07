@@ -5,6 +5,10 @@
  */
 package ws;
 
+import ModelBeans.BeansUsuario;
+import ModelConection.ConexaoBD;
+import ModelDao.UsuarioDao;
+import com.google.gson.Gson;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
@@ -22,6 +26,7 @@ import javax.ws.rs.core.MediaType;
 @Path("webService")
 public class webService {
 
+    ConexaoBD conex = new ConexaoBD();
     @Context
     private UriInfo context;
 
@@ -40,7 +45,25 @@ public class webService {
     public String getJson() {
         return "meu primeiro web service";
     }
-
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("usuario/get")
+    public String getUsuario(){
+        conex.conexao();
+        UsuarioDao u = new UsuarioDao();
+        BeansUsuario mod = new BeansUsuario();
+        mod.setCodigo(Integer.parseInt("4"));
+        mod.setNome("otavio");
+        mod.setTipo("Administrador");
+        mod.setUsuario("oti");
+        mod.setSenha("123");
+        mod.setSenhaConfirmacao("123");
+        u.salvar(mod);
+        
+        Gson g = new Gson();
+        return g.toJson(mod);
+    }
+    
     /**
      * PUT method for updating or creating an instance of webService
      * @param content representation for the resource
