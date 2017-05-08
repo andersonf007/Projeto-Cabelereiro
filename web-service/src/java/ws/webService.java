@@ -49,7 +49,7 @@ public class webService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("usuario/get")
     public String getUsuario(){
-        conex.conexao();
+       // conex.conexao();
         UsuarioDao u = new UsuarioDao();
         BeansUsuario mod = new BeansUsuario();
         mod.setCodigo(Integer.parseInt("4"));
