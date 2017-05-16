@@ -31,7 +31,7 @@ public class ConexaoBD {
             Class.forName("org.postgresql.Driver");
             System.setProperty("jdbc.Drivers", driver);
             con = DriverManager.getConnection(caminho,usuario,senha);
-        //  JOptionPane.showMessageDialog(null, "conectado ao banco com sucesso!");
+         JOptionPane.showMessageDialog(null, "conectado ao banco com sucesso!");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "erro ao se conectar com o banco\n" + ex.getMessage());
         } catch (ClassNotFoundException ex) {

@@ -99,11 +99,7 @@ public class AgendaDao {
         
         String sql = "UPDATE agenda SET horario_agendas=?, data_agendas=?, servico_agendas=?"
                     + "WHERE cod_agendas=? ";
-      /*  "UPDATE agenda A set C.nome_cliente=?, F.nome_funcionario=?, A.horario_agenda=?, "
-                   + "A.data_agenda=?, A.servico_agenda=? JOIN clientes C ON C.cod_cliente = A.codcliente_agenda"
-                   + " JOIN funcionarios F ON F.cod_funcionario = A.codfuncionario_agenda"
-                   + " where cod_agenda=? and codcliente_agenda = '"+codCliente+"' and codfuncionario_agenda = '"+codFuncionario+"'"
-        */try {
+        try {
            PreparedStatement pst = conex.con.prepareStatement(sql);
             pst.setString(1, mod.getHorario());
             pst.setDate(2, new java.sql.Date(mod.getData().getTime()));

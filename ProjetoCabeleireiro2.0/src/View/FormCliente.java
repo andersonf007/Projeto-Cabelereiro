@@ -5,10 +5,23 @@ import ModelBeans.BeansCliente;
 import ModelBeans.ModelTabela;
 import ModelConection.ConexaoBD;
 import ModelDao.ClienteDao;
+import Teste.Main;
+import com.google.gson.Gson;
+
+import com.google.gson.JsonObject;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
+import org.json.simple.JSONObject;
 
 public class FormCliente extends javax.swing.JFrame {
 
@@ -235,24 +248,56 @@ public class FormCliente extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "preencha o NOME para continuar");
             jTextFieldNome.requestFocus();
         }else if(flag == 1){
-            mod.setNome(jTextFieldNome.getText());
-            mod.setEmail(jTextFieldEmail.getText());
-//            mod.setCpf(jFormattedTextFieldCPF.getText());
-            mod.setTelefone(jFormattedTextFieldTelefone.getText());
-            mod.setSexo((String) jComboBoxSexo.getSelectedItem());
-//            mod.setDataNascimento(jDateChooserDataNascimento.getDate());
-            control.salvar(mod);
+            
+            String nome = jTextFieldNome.getText();
+            String email = jTextFieldEmail.getText();
+            String telefone = jFormattedTextFieldTelefone.getText();
+            String sexo = (String) jComboBoxSexo.getSelectedItem();
+
+            //Cria um Objeto JSON
+            JSONObject jsonObject = new JSONObject();
+
+            //Armazena dados em um Objeto JSON
+            jsonObject.put("nome", nome);
+            jsonObject.put("email", email);
+            jsonObject.put("telefone", telefone);
+            jsonObject.put("sexo", sexo);
+
+            Gson gson = new Gson();
+            String Json = gson.toJson(jsonObject);
+
+            URL url;
+            try {
+                url = new URL("http://localhost:8084/web-service/webresources/webService/cliente/cadastro");
+
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoOutput(true);
+                connection.setRequestMethod("PUT");
+                connection.setRequestProperty("Content-Type", "application/json");
+
+                OutputStream os = connection.getOutputStream();
+                os.write(Json.getBytes("UTF-8"));
+                os.flush();
+
+                int code = connection.getResponseCode();
+                System.out.println(code + " - " + Json);
+
+                os.close();
+                connection.disconnect();
+
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
             jTextFieldNome.setText("");
             jTextFieldEmail.setText("");
-//            jFormattedTextFieldCPF.setText("");
             jFormattedTextFieldTelefone.setText("");
             jTextFieldNome.setEnabled(false);
             jTextFieldEmail.setEnabled(false);
-//            jFormattedTextFieldCPF.setEnabled(false);
             jFormattedTextFieldTelefone.setEnabled(false);
             jComboBoxSexo.setEnabled(false);
-//            jDateChooserDataNascimento.setEnabled(false);
             jTextFieldPesquisa.setEnabled(true);
 
             jButtonSalvar.setEnabled(false);
@@ -267,22 +312,17 @@ public class FormCliente extends javax.swing.JFrame {
             mod.setCodido(Integer.parseInt(jTextFieldCodigo.getText()));
             mod.setNome(jTextFieldNome.getText());
             mod.setEmail(jTextFieldEmail.getText());
-//            mod.setCpf(jFormattedTextFieldCPF.getText());
             mod.setTelefone(jFormattedTextFieldTelefone.getText());
             mod.setSexo((String) jComboBoxSexo.getSelectedItem());
-//            mod.setDataNascimento(jDateChooserDataNascimento.getDate());
             control.editar(mod);
 
             jTextFieldNome.setText("");
             jTextFieldEmail.setText("");
-//            jFormattedTextFieldCPF.setText("");
             jFormattedTextFieldTelefone.setText("");
             jTextFieldNome.setEnabled(false);
             jTextFieldEmail.setEnabled(false);
-//            jFormattedTextFieldCPF.setEnabled(false);
             jFormattedTextFieldTelefone.setEnabled(false);
             jComboBoxSexo.setEnabled(false);
-//            jDateChooserDataNascimento.setEnabled(false);
             jButtonSalvar.setEnabled(false);
             jButtonCancelar.setEnabled(false);
             jTableCliente.setEnabled(true);

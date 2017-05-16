@@ -5,10 +5,16 @@
  */
 package ws;
 
+import ModelBeans.BeansCliente;
 import ModelBeans.BeansUsuario;
 import ModelConection.ConexaoBD;
+import ModelDao.ClienteDao;
 import ModelDao.UsuarioDao;
 import com.google.gson.Gson;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
@@ -16,7 +22,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  * REST Web Service
@@ -45,23 +55,44 @@ public class webService {
     public String getJson() {
         return "meu primeiro web service";
     }
-    @GET
+    
+    @PUT
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("usuario/get")
-    public String getUsuario(){
-       // conex.conexao();
-        UsuarioDao u = new UsuarioDao();
-        BeansUsuario mod = new BeansUsuario();
-        mod.setCodigo(Integer.parseInt("4"));
-        mod.setNome("otavio");
-        mod.setTipo("Administrador");
-        mod.setUsuario("oti");
-        mod.setSenha("123");
-        mod.setSenhaConfirmacao("123");
-        u.salvar(mod);
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("cliente/cadastro")
+    public String cadastrarCliente(String json){
+      BeansCliente mod = new BeansCliente();
+      ClienteDao c = new ClienteDao();
+      JSONObject jsonObject;
+       
+      JSONParser parser = new JSONParser();  
         
-        Gson g = new Gson();
-        return g.toJson(mod);
+        String nome;
+        String email;
+	String telefone;
+	String sexo; 
+        
+        try {
+            jsonObject = (JSONObject) parser.parse(json);
+            
+            nome = (String) jsonObject.get("nome");
+            email = (String) jsonObject.get("email");
+            telefone = (String) jsonObject.get("telefone");
+            sexo = (String) jsonObject.get("sexo");
+            
+            mod.setNome(nome);
+            mod.setEmail(email);
+            mod.setTelefone(telefone);
+            mod.setSexo(sexo);
+            c.salvar(mod);
+            
+            Gson g = new Gson();
+            return g.toJson(mod);
+            
+        } catch (ParseException ex) {
+            Logger.getLogger(webService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     /**
