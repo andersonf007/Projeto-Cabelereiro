@@ -9,10 +9,17 @@ import ModelBeans.BeansFuncionario;
 import ModelBeans.ModelTabela;
 import ModelConection.ConexaoBD;
 import ModelDao.FuncionarioDao;
+import com.google.gson.Gson;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
+import org.json.simple.JSONObject;
 
 public class FormFuncionario extends javax.swing.JFrame {
 
@@ -216,36 +223,58 @@ public class FormFuncionario extends javax.swing.JFrame {
 
     private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
 
-       /* if (!jTextFieldEmail.getText().isEmpty() && !control.validaEmail(jTextFieldEmail.getText())) {
-            JOptionPane.showMessageDialog(null, "digite um EMAIL valido");
-            jTextFieldEmail.requestFocus();
-        } else*/ if (jTextFieldNome.getText().isEmpty()) {
+        if (jTextFieldNome.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "preencha o NOME para continuar");
             jTextFieldNome.requestFocus();
-        }/* else if (control.verificaData((Date) jDateChooserDataNascimento.getDate())) {
-            JOptionPane.showMessageDialog(null, "digite uma DATA valido");
-            jDateChooserDataNascimento.requestFocus();
-        }*/
-        if (flag == 1) {
-            mod.setNome(jTextFieldNome.getText());
-        //    mod.setEmail(jTextFieldEmail.getText());
-        //    mod.setCpf(jFormattedTextFieldCPF.getText());
-            mod.setTelefone(jFormattedTextFieldTelefone.getText());
-            mod.setSexo((String) jComboBoxSexo.getSelectedItem());
-        //    mod.setDataNascimento(jDateChooserDataNascimento.getDate());
-            control.salvar(mod);
+        }else if (flag == 1) {
+        
+            String nome = jTextFieldNome.getText();
+            String telefone = jFormattedTextFieldTelefone.getText();
+            String sexo = (String) jComboBoxSexo.getSelectedItem();
+
+            //Cria um Objeto JSON
+            JSONObject jsonObject = new JSONObject();
+
+            //Armazena dados em um Objeto JSON
+            jsonObject.put("nome", nome);
+            jsonObject.put("telefone", telefone);
+            jsonObject.put("sexo", sexo);
+
+            Gson gson = new Gson();
+            String Json = gson.toJson(jsonObject);
+
+            URL url;
+            try {
+                url = new URL("http://localhost:8084/web-service/webresources/webService/funcionario/cadastro");
+
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoOutput(true);
+                connection.setRequestMethod("PUT");
+                connection.setRequestProperty("Content-Type", "application/json");
+
+                OutputStream os = connection.getOutputStream();
+                os.write(Json.getBytes("UTF-8"));
+                os.flush();
+
+                int code = connection.getResponseCode();
+                System.out.println(code + " - " + Json);
+
+                os.close();
+                connection.disconnect();
+
+            } catch (MalformedURLException ex) {
+                JOptionPane.showMessageDialog(null, "erro de URLException conexao ao rest ( salvar funcionario)\n" + ex);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "erro de IOException conexao ao rest ( salvar funcionario) \n" + ex);
+            }
+
 
             jTextFieldNome.setText("");
-        //    jTextFieldEmail.setText("");
-        //    jFormattedTextFieldCPF.setText("");
             jFormattedTextFieldTelefone.setText("");
             jTextFieldPesquisa.setText("");
             jTextFieldNome.setEnabled(false);
-        //   jTextFieldEmail.setEnabled(false);
-        //    jFormattedTextFieldCPF.setEnabled(false);
             jFormattedTextFieldTelefone.setEnabled(false);
             jComboBoxSexo.setEnabled(false);
-        //    jDateChooserDataNascimento.setEnabled(false);
             jTextFieldPesquisa.setEnabled(true);
 
             jButtonSalvar.setEnabled(false);
@@ -291,8 +320,6 @@ public class FormFuncionario extends javax.swing.JFrame {
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
         jTextFieldNome.setText("");
-    //    jTextFieldEmail.setText("");
-    //    jFormattedTextFieldCPF.setText("");
         jFormattedTextFieldTelefone.setText("");
         jTextFieldCodigo.setText("");
         jTextFieldPesquisa.setText("");
@@ -306,15 +333,11 @@ public class FormFuncionario extends javax.swing.JFrame {
         jTableFuncionario.setEnabled(true);
 
         jTextFieldNome.setEnabled(!true);
-    //    jTextFieldEmail.setEnabled(!true);
-    //    jFormattedTextFieldCPF.setEnabled(!true);
         jFormattedTextFieldTelefone.setEnabled(!true);
         jComboBoxSexo.setEnabled(!true);
-    //    jDateChooserDataNascimento.setEnabled(!true);
         jTextFieldPesquisa.setEnabled(!false);
 
         preencherTabela("SELECT * FROM funcionarios ORDER BY cod_funcionario");
-
 
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
@@ -329,11 +352,8 @@ public class FormFuncionario extends javax.swing.JFrame {
         jTableFuncionario.setEnabled(false);
 
         jTextFieldNome.setEnabled(true);
-    //    jTextFieldEmail.setEnabled(true);
-    //    jFormattedTextFieldCPF.setEnabled(true);
         jFormattedTextFieldTelefone.setEnabled(true);
         jComboBoxSexo.setEnabled(true);
-    //    jDateChooserDataNascimento.setEnabled(true);
         jTextFieldPesquisa.setEnabled(false);
 
         preencherTabela("SELECT * FROM funcionarios ORDER BY nome_funcionario");
@@ -350,16 +370,11 @@ public class FormFuncionario extends javax.swing.JFrame {
 
             jTextFieldCodigo.setText("");
             jTextFieldNome.setText("");
-    //        jTextFieldEmail.setText("");
-    //        jFormattedTextFieldCPF.setText("");
             jFormattedTextFieldTelefone.setText("");
             jTextFieldPesquisa.setText("");
             jTextFieldNome.setEnabled(false);
-    //        jTextFieldEmail.setEnabled(false);
-    //        jFormattedTextFieldCPF.setEnabled(false);
             jFormattedTextFieldTelefone.setEnabled(false);
             jComboBoxSexo.setEnabled(false);
-    //        jDateChooserDataNascimento.setEnabled(false);
             jTextFieldPesquisa.setEnabled(true);
 
             jTableFuncionario.setEnabled(true);

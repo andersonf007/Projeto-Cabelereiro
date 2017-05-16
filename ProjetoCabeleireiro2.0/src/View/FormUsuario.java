@@ -6,10 +6,17 @@ import ModelBeans.BeansUsuario;
 import ModelBeans.ModelTabela;
 import ModelConection.ConexaoBD;
 import ModelDao.UsuarioDao;
+import com.google.gson.Gson;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -321,12 +328,49 @@ public class FormUsuario extends javax.swing.JFrame {
 
     private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
         if (flag == 1) {
-            mod.setNome(jTextFieldNome.getText());
-            mod.setUsuario(jTextFieldUsuário.getText());
-            mod.setSenha(jPasswordFieldSenha.getText());
-            mod.setSenhaConfirmacao(jPasswordFieldConfirmarSenha.getText());
-            mod.setTipo((String) jComboBoxTipo.getSelectedItem());
-            dao.salvar(mod);
+            String nome = jTextFieldNome.getText();
+            String usuario = jTextFieldUsuário.getText();
+            String senha = jPasswordFieldSenha.getText();
+            String senhaConfirmacao = jPasswordFieldConfirmarSenha.getText();
+            String tipo = (String) jComboBoxTipo.getSelectedItem();
+
+            //Cria um Objeto JSON
+            JSONObject jsonObject = new JSONObject();
+
+            //Armazena dados em um Objeto JSON
+            jsonObject.put("nome", nome);
+            jsonObject.put("usuario", usuario);
+            jsonObject.put("senha", senha);
+            jsonObject.put("senhaConfirmacao", senhaConfirmacao);
+            jsonObject.put("tipo", tipo);
+
+            Gson gson = new Gson();
+            String Json = gson.toJson(jsonObject);
+
+            URL url;
+            try {
+                url = new URL("http://localhost:8084/web-service/webresources/webService/usuario/cadastro");
+
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoOutput(true);
+                connection.setRequestMethod("PUT");
+                connection.setRequestProperty("Content-Type", "application/json");
+
+                OutputStream os = connection.getOutputStream();
+                os.write(Json.getBytes("UTF-8"));
+                os.flush();
+
+                int code = connection.getResponseCode();
+                System.out.println(code + " - " + Json);
+
+                os.close();
+                connection.disconnect();
+
+            } catch (MalformedURLException ex) {
+                JOptionPane.showMessageDialog(null, "erro de URLException conexao ao rest ( salvar usuario)\n" + ex);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "erro de IOException conexao ao rest ( salvar usuario) \n" + ex);
+            }
             
             jTextFieldNome.setText("");
             jTextFieldUsuário.setText("");

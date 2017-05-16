@@ -13,6 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import org.json.simple.JSONObject;
 
 /*
@@ -35,26 +36,28 @@ public class Main {
 
     public static void main(String[] args) {//criei um pacote novo para tentar executar o web service ( testar) 
 
-        String nome = "pedro3";
-        String email = "pedro@pedro";
-        String telefone = "22324523";
-        String sexo = "Masculino";
+        String nome = "rodrigo";
+        String usuario = "masterr";
+        String senha = "2";
+        String senhaConfirmacao = "2";
+        String tipo = "Funcionario";
 
         //Cria um Objeto JSON
         JSONObject jsonObject = new JSONObject();
 
         //Armazena dados em um Objeto JSON
         jsonObject.put("nome", nome);
-        jsonObject.put("email", email);
-        jsonObject.put("telefone", telefone);
-        jsonObject.put("sexo", sexo);
+        jsonObject.put("usuario", usuario);
+        jsonObject.put("senha", senha);        
+        jsonObject.put("senhaConfirmacao", senhaConfirmacao);
+        jsonObject.put("tipo", tipo);
 
         Gson gson = new Gson();
         String Json = gson.toJson(jsonObject);
 
         URL url;
         try {
-            url = new URL("http://localhost:8084/web-service/webresources/webService/cliente/cadastro");
+            url = new URL("http://localhost:8084/web-service/webresources/webService/usuario/cadastro");
 
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setDoOutput(true);
@@ -72,9 +75,9 @@ public class Main {
             connection.disconnect();
 
         } catch (MalformedURLException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "erro de URLException conexao ao rest ( salvar usuario)\n" + ex);
         } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "erro de IOException conexao ao rest ( salvar usuario) \n" + ex);
         }
 
     }

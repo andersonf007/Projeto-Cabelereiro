@@ -6,9 +6,11 @@
 package ws;
 
 import ModelBeans.BeansCliente;
+import ModelBeans.BeansFuncionario;
 import ModelBeans.BeansUsuario;
 import ModelConection.ConexaoBD;
 import ModelDao.ClienteDao;
+import ModelDao.FuncionarioDao;
 import ModelDao.UsuarioDao;
 import com.google.gson.Gson;
 import java.io.FileReader;
@@ -95,6 +97,85 @@ public class webService {
         return null;
     }
     
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("funcionario/cadastro")
+    public String cadastrarFuncionario(String json){
+        
+      BeansFuncionario mod = new BeansFuncionario();
+      FuncionarioDao f = new FuncionarioDao();
+      JSONObject jsonObject;
+       
+      JSONParser parser = new JSONParser();  
+        
+        String nome;
+       	String telefone;
+	String sexo; 
+        
+        try {
+            jsonObject = (JSONObject) parser.parse(json);
+            
+            nome = (String) jsonObject.get("nome");
+            telefone = (String) jsonObject.get("telefone");
+            sexo = (String) jsonObject.get("sexo");
+            
+            mod.setNome(nome);
+            mod.setTelefone(telefone);
+            mod.setSexo(sexo);
+            f.salvar(mod);
+            
+            Gson g = new Gson();
+            return g.toJson(mod);
+            
+        } catch (ParseException ex) {
+            Logger.getLogger(webService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("usuario/cadastro")
+    public String cadastrarUsuario(String json){
+        
+      BeansUsuario mod = new BeansUsuario();
+      UsuarioDao u = new UsuarioDao();
+      JSONObject jsonObject;
+       
+      JSONParser parser = new JSONParser();  
+        
+        String nome;
+       	String usuario;
+	String senha;         
+       	String senhaConfirmacao;
+	String tipo; 
+        
+        try {
+            jsonObject = (JSONObject) parser.parse(json);
+            
+            nome = (String) jsonObject.get("nome");
+            usuario = (String) jsonObject.get("usuario");
+            senha = (String) jsonObject.get("senha");
+            senhaConfirmacao = (String) jsonObject.get("senhaConfirmacao");
+            tipo = (String) jsonObject.get("tipo");
+            
+            mod.setNome(nome);
+            mod.setUsuario(usuario);
+            mod.setSenha(senha);
+            mod.setSenhaConfirmacao(senhaConfirmacao);
+            mod.setTipo(tipo);
+            u.salvar(mod);
+            
+            Gson g = new Gson();
+            return g.toJson(mod);
+            
+        } catch (ParseException ex) {
+            Logger.getLogger(webService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
     /**
      * PUT method for updating or creating an instance of webService
      * @param content representation for the resource
