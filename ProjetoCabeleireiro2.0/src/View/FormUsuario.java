@@ -353,7 +353,7 @@ public class FormUsuario extends javax.swing.JFrame {
 
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoOutput(true);
-                connection.setRequestMethod("PUT");
+                connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
 
                 OutputStream os = connection.getOutputStream();

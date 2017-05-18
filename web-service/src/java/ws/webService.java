@@ -15,6 +15,7 @@ import ModelDao.UsuarioDao;
 import com.google.gson.Gson;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.Context;
@@ -22,9 +23,11 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -58,7 +61,8 @@ public class webService {
         return "meu primeiro web service";
     }
     
-    @PUT
+    /*--------------------CLIENTE---------------------*/
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("cliente/cadastro")
@@ -97,7 +101,19 @@ public class webService {
         return null;
     }
     
-    @PUT
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("cliente/listarTodos")
+    public List<BeansCliente> listarCliente(){return null;}
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("cliente/recuperarUnico")
+    public String recuperarCliente(@PathParam("nome") String json){return null;}
+    
+    /*-------------------FUNCIONARIO------------------*/
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("funcionario/cadastro")
@@ -134,7 +150,8 @@ public class webService {
         return null;
     }
     
-    @PUT
+    /*-------------------USUARIO----------------------*/
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("usuario/cadastro")
@@ -176,12 +193,27 @@ public class webService {
         }
         return null;
     }
-    /**
-     * PUT method for updating or creating an instance of webService
-     * @param content representation for the resource
-     */
-    @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void putJson(String content) {
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    //@Consumes(MediaType.TEXT_PLAIN)
+    @Path("usuario/recuperarUnico")
+    public String recuperarUsuario(@QueryParam("nome") String json){
+        
+      BeansUsuario mod = new BeansUsuario();
+      UsuarioDao u = new UsuarioDao();
+   
+      String nome;
+           
+            mod.setPesquisa(json);           
+            mod = u.buscaUsuario(mod);
+            
+            Gson g = new Gson();
+            String d = g.toJson(mod);
+            return g.toJson(mod);
+          
     }
+        
+    
+    /*---------------------AGENDA------------------------*/
 }
