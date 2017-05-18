@@ -23,9 +23,8 @@ local json = require( "json" )  -- Include the Corona JSON library
 			print("1")
 			if event.phase == "began" then
 				print("2")
-			local superHeroes = {
-		    	{ nome=TxtNome.text, email=TxtEmail.text, telefone=TxtTelefone.text, sexo=TxtSexo.text }
-			}
+			local superHeroes = 	{ nome=TxtNome.text, email=TxtEmail.text, telefone=TxtTelefone.text, sexo=TxtSexo.text }
+			
 					--	print(superHeroes)
 			local serializedString = json.encode( superHeroes )
 
@@ -39,9 +38,6 @@ local json = require( "json" )  -- Include the Corona JSON library
 			params.headers = headers
 
 			params.body = serializedString
-
-	
-
 
 		network.request( "http://localhost:8084/web-service/webresources/webService/cliente/cadastro", "POST", handleResponse, params )
 
